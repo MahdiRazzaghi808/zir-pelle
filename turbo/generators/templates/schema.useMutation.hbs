@@ -1,0 +1,23 @@
+import { z } from 'zod';
+import { coreApiMutationResponseSchema } from '@/api/instance/core-api';
+import t from '@/json/fa.json';
+
+// Request
+export const {{method}}{{pascalCase name}}RequestSchemaTransformed = z
+  .object({
+    id: z.number().int(),
+    title: z
+      .string({ message: t.form.validation.required })
+      .nonempty({ message: t.form.validation.required }),
+    isActive: z.boolean(),
+  })
+  .transform((data) => data);
+
+// Response
+export const {{method}}{{pascalCase name}}ResponseSchemaTransofrmed = 
+  coreApiMutationResponseSchema().transform((data) => data);
+
+export const {{method}}{{pascalCase name}}Schema = {
+  request: {{method}}{{pascalCase name}}RequestSchemaTransformed,
+  response: {{method}}{{pascalCase name}}ResponseSchemaTransofrmed,
+};

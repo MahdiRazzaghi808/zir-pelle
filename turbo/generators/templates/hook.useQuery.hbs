@@ -1,0 +1,31 @@
+import type {
+  ApiError,
+  ApiResponse,
+  UseQueryProps,
+  WithParams,
+} from "@/api/types/api.types";
+import { useQuery } from "@tanstack/react-query";
+import { {{method}}{{pascalCase name}} } from "./{{method}}-{{kebabCase name}}";
+import type {
+  {{pascalCase method}}{{pascalCase name}}Request,
+  {{pascalCase method}}{{pascalCase name}}ResponseTransformed,
+} from "./{{method}}-{{kebabCase name}}.types";
+
+export type Use{{pascalCase method}}{{pascalCase name}}Props = UseQueryProps<
+  ApiResponse<{{pascalCase method}}{{pascalCase name}}ResponseTransformed>,
+  WithParams<{{pascalCase method}}{{pascalCase name}}Request>
+>;
+
+export const {{method}}{{pascalCase name}}QueryKey = (params?: {{pascalCase method}}{{pascalCase name}}Request) => ["{{method}}{{pascalCase name}}", ...Object.values(params || {})];
+
+export const use{{pascalCase method}}{{pascalCase name}} = (props?: Use{{pascalCase method}}{{pascalCase name}}Props) => {
+  const { params, ...resProps } = props || {};
+
+  const query = useQuery<ApiResponse<{{pascalCase method}}{{pascalCase name}}ResponseTransformed>, ApiError>({
+  queryKey: {{method}}{{pascalCase name}}QueryKey(params),
+  queryFn: () => {{method}}{{pascalCase name}}(params),
+    ...resProps,
+  });
+
+  return query;
+};

@@ -1,0 +1,40 @@
+import path from "path";
+import { toast } from 'sonner';
+import t from '@/json/fa.json';
+import { {{service}}Api } from "@/api/instance/{{kebabCase service}}-api"; 
+import type { ApiResponse } from "@/api/types/api.types";
+import { requestHandler } from "@/api/utils/request-handler";
+import { {{method}}{{ pascalCase name}}Schema as schema } from "./{{method}}-{{kebabCase name}}.schema";
+import type {
+  {{pascalCase method}}{{ pascalCase name}}Request,
+  {{pascalCase method}}{{ pascalCase name}}ResponseTransformed,
+} from "./{{method}}-{{kebabCase name}}.types";
+import { AxiosRequestConfig } from "axios";
+
+export const {{method}}{{ pascalCase name}}URL = (id: {{pascalCase method}}{{ pascalCase name}}Request['id']) => 
+  path.join("/{{pascalCase path}}", `${id}`);
+
+export const {{method}}{{ pascalCase name}} = async (
+  props?: {{pascalCase method}}{{ pascalCase name}}Request,
+  option?: AxiosRequestConfig, 
+): Promise<ApiResponse<{{pascalCase method}}{{ pascalCase name}}ResponseTransformed>> => {
+  const payloadParsed = schema.request.parse(props);
+
+  const URL = {{method}}{{ pascalCase name}}URL(payloadParsed.id);
+
+  const response = await requestHandler(
+    () => {{service}}Api.{{method}}(URL, payloadParsed, , ...options),
+    schema.response._def.schema,
+    {
+      isMock: false,
+    },
+  );
+
+  try {
+    response.data = schema.response.parse(response.data);
+  } catch {
+    toast.error(t.toast.error.parseResponse);
+  }
+
+  return response;
+};
