@@ -6,7 +6,7 @@ function Page() {
   const [page, setPage] = useState(1);
 
   return (
-    <div>
+    <div className="">
       <PaginationTable
         page={page}
         pageSize={75}

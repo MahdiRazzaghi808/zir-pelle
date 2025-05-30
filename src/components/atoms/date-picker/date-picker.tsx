@@ -10,6 +10,7 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 
 import "react-multi-date-picker/styles/layouts/mobile.css";
+import { Input } from "../input";
 
 const fullWeekDays = [
   "شنبه",
@@ -65,20 +66,23 @@ function DatePickerClient({
       weekDays={weekDays}
       className={className ?? (isMobile ? "rmdp-mobile" : "rmdp-prime")}
       minDate={minDate ?? new DateObject()}
+      render={
+        <Input />
+      }
       plugins={[
         weekends(),
         ...(showToolbar
           ? [
-              <Toolbar
-                key="toolbar"
-                position="bottom"
-                names={{
-                  today: "امروز",
-                  deselect: "",
-                  close: "بستن",
-                }}
-              />,
-            ]
+            <Toolbar
+              key="toolbar"
+              position="bottom"
+              names={{
+                today: "امروز",
+                deselect: "",
+                close: "بستن",
+              }}
+            />,
+          ]
           : []),
       ]}
     />

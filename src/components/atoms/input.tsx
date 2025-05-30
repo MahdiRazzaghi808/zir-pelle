@@ -6,7 +6,7 @@ import { toEnNumbers } from "@/utils/numbers";
 import { toast } from "sonner";
 
 const inputVariants = cva(
-  "placeholder:text-slate-400 leading-7 disabled:cursor-not-allowed disabled:text-slate-500 rounded-2xl border-slate-400 focus:border-slate-600 bg-",
+  "placeholder:text-slate-400 leading-7 disabled:cursor-not-allowed disabled:text-slate-500 rounded-3xl border-slate-400 focus:border-slate-600 bg-",
   {
     variants: {
       variant: {

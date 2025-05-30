@@ -1,91 +1,81 @@
-// tailwind.config.js
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    fontFamily: {
-      vazir: ["Vazirmatn", "sans-serif"],
-    },
-    colors: {
-      transparent: "transparent",
-      current: "currentColor",
-      primary: {
-        DEFAULT: "#F89267",
-        100: "#FFFAF8",
-        200: "#FFF5F0",
-        300: "#FFE1D4",
-        400: "#FFB99C",
-        600: "#E47B4E",
-        700: "#B6552C",
+    extend: {
+      colors: {
+        primary: {
+          100: "var(--primary-100)",
+          200: "var(--primary-200)",
+          300: "var(--primary-300)",
+          400: "var(--primary-400)",
+          500: "var(--primary-500)",
+          600: "var(--primary-600)",
+          700: "var(--primary-700)",
+          DEFAULT: "var(--primary-500)",
+        },
+        secondary: {
+          200: "var(--secondary-200)",
+          300: "var(--secondary-300)",
+          400: "var(--secondary-400)",
+          500: "var(--secondary-500)",
+          700: "var(--secondary-700)",
+          DEFAULT: "var(--secondary-500)",
+        },
+        tertiary: {
+          100: "var(--tertiary-100)",
+          200: "var(--tertiary-200)",
+          300: "var(--tertiary-300)",
+          500: "var(--tertiary-500)",
+          600: "var(--tertiary-600)",
+          700: "var(--tertiary-700)",
+          DEFAULT: "var(--tertiary-500)",
+        },
+        white: "var(--white)",
+        black: "var(--black)",
       },
-      secondary: {
-        DEFAULT: "#041558",
-        200: "#F3F6FF",
-        300: "#CFD9FF",
-        400: "#6280F6",
-        500: "#DE2CA3",
-        700: "#030D34",
+      screens: {
+        xs: "480px",
       },
-      tertiary: {
-        DEFAULT: "#c0c0c0",
-        100: "#FEFEFE",
-        200: "#F8F8F8",
-        300: "#D8D8D8",
-        500: "#9D9D9D",
-        600: "#585858",
-        700: "#414141",
+      fontSize: {
+        xs: "0.75rem",  // 12px
+        sm: "0.875rem", // 14px
+        base: "1rem",   // 16px
+        lg: "1.125rem", // 18px
+        xl: "1.5rem",   // 24px
+        "2xl": "2rem",  // 32px
+        "3xl": "2.5rem",// 40px
+        "4xl": "3rem",  // 48px
+        "5xl": "3.75rem",// 60px
+        "6xl": "4.5rem",// 72px
+        "7xl": "6rem",  // 96px
       },
-      white: "#ffffff",
-      black: "#000000",
+      spacing: {
+        0: "0px",
+        1: "0.25rem",  // 4px
+        2: "0.5rem",   // 8px
+        4: "1rem",     // 16px
+        8: "2rem",     // 32px
+        16: "4rem",    // 64px
+        32: "8rem",    // 128px
+      },
+      borderRadius: {
+        none: "0px",
+        sm: "2px",
+        DEFAULT: "6px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
+        "2xl": "24px",
+        "3xl": "30px",
+        full: "9999px",
+      },
     },
-
-    screens: {
-      xs: "480px",
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
-      "2xl": "1536px",
-    },
-
-    fontSize: {
-      xs: "12px",
-      sm: "14px",
-      base: "16px",
-      lg: "18px",
-      xl: "24px",
-      "2xl": "32px",
-      "3xl": "40px",
-      "4xl": "48px",
-      "5xl": "60px",
-      "6xl": "72px",
-      "7xl": "96px",
-    },
-    spacing: {
-      0: "0px",
-      1: "4px",
-      2: "8px",
-      4: "16px",
-      8: "32px",
-      16: "64px",
-      32: "128px",
-    },
-    borderRadius: {
-      none: "0px",
-      sm: "2px",
-      DEFAULT: "6px",
-      md: "8px",
-      lg: "12px",
-      xl: "16px",
-      "2xl": "24px",
-      full: "9999px",
-    },
-
   },
   plugins: [],
 };

@@ -1,6 +1,5 @@
-
-import "./fonts.css";
-import "./globals.css";
+import "@/app/fonts.css"
+import "./globals.css"
 import { ApiProvider } from "@/api/providers/api-provider";
 
 
