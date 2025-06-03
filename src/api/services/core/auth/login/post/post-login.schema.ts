@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { coreApiMutationResponseSchema } from "@/api/instance/core-api";
-import t from "@/json/fa.json";
 
 // Request
 export const postLoginRequestSchemaTransformed = z
   .object({
-    email: z.string().min(3).max(255),
-    password: z.string().min(4).max(255),
+    phoneNumber: z
+      .string({ required_error: "لطفا شماره موبایل را وارد کنید" })
+      .regex(/^09\d{9}$/, { message: "شماره موبایل معتبر نیست" }),
   })
   .transform((data) => data);
 

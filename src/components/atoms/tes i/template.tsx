@@ -1,32 +1,36 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 // React & Next
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 // Third-party libraries
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 // Types & Schemas
-import { postLoginSchema } from "@/api/services/core/auth/login/post/post-login.schema";
 import { PostLoginRequest } from "@/api/services/core/auth/login/post/post-login.types";
+import { postLoginSchema } from "@/api/services/core/auth/login/post/post-login.schema";
 
 // API Hooks
 import { usePostLogin } from "@/api/services/core/auth/login/post/use-post-login";
 
 // UI Components (Atoms)
+import { Icon } from "@/components/atoms/icon";
+import { Input } from "@/components/atoms/input";
 import { Button } from "@/components/atoms/button";
+import { PasswordInput } from "@/components/atoms/password-input";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormMessage
+  FormLabel,
+  FormMessage,
 } from "@/components/atoms/form";
-import { Input } from "@/components/atoms/input";
 
 // Constants / i18n
 import t from "@/json/fa.json";
@@ -52,44 +56,45 @@ export default function LoginPage() {
 
   return (
     <div className="w-full h-screen flex  items-center justify-center">
-      <div className="w-full max-w-md mx-auto md:border-1  border-black/20 rounded-3xl p-6">
+      <div className="w-full max-w-md mx-auto border-2 border-dashed border-primary-300 rounded-3xl p-6">
         <Form {...form}>
           <form
             autoComplete="off"
-            className="space-y-5"
+            className="space-y-7"
             onSubmit={form.handleSubmit((data) => {
               mutation.mutate({
-                phoneNumber: data.phoneNumber.trim(),
+                email: data.email.toString(),
+                password: data.password.toString(),
               });
             })}
           >
             <Image
-              src="/images/login-logo.svg"
+              src="/images/logo-black.png"
               alt=""
               width={100}
               height={100}
               className="mx-auto block"
             />
-
-
-            <div className="flex flex-col gap-4 justify-center">
-              <h1 className="text-xl font-bold">ورود یا ثبت نام</h1>
-              <p>برای ورود یا ثبت نام شماره همراه خود را وارد کنید</p>
-            </div>
-
             <FormField
               control={form.control}
-              name="phoneNumber"
+              name="email"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>نام کاربری</FormLabel>
                   <FormControl>
                     <Input
                       autoComplete="off"
-                      type=""
-                      placeholder="شماره همراه"
-                      className="pr-6"
+                      // placeholder="لطفا نام کاربری خود را وارد کنید"
+                      className="bg-slate-100 pr-10"
                       disabled={mutation.isPending}
-                      textAlign="left"
+                      onlyLatin
+                      startIcon={
+                        <Icon
+                          id="profile-1"
+                          size={22}
+                          className="fill absolute right-3 -scale-x-100"
+                        />
+                      }
                       {...field}
                     />
                   </FormControl>
@@ -97,6 +102,34 @@ export default function LoginPage() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>رمز عبور</FormLabel>
+                  <FormControl>
+                    <PasswordInput
+                      autoComplete="new-password"
+                      // placeholder="لطفا رمز عبور خود را وارد کنید"
+                      className="bg-slate-100 pr-10"
+                      disabled={mutation.isPending}
+                      onlyLatin
+                      startIcon={
+                        <Icon
+                          id="password"
+                          size={22}
+                          className="absolute right-3 -scale-x-100"
+                        />
+                      }
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="-bottom-5 right-4" />
+                </FormItem>
+              )}
+            />
+
             <Button
               type="submit"
               className="w-full"
@@ -105,7 +138,7 @@ export default function LoginPage() {
               {mutation.isPending ? (
                 <Loader2 className="animate-spin" />
               ) : (
-                "ادامه"
+                "ورود"
               )}
             </Button>
           </form>

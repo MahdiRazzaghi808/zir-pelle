@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
 :root {
     --primary-100: #FFFAF8;
     --primary-200: #FFF5F0;
@@ -8,7 +9,7 @@
     --primary-500: #F89267;
     --primary-600: #E47B4E;
     --primary-700: #B6552C;
-    --primary: #B6552C;
+    --primary: #F89267;
 
     --secondary-200: #F3F6FF;
     --secondary-300: #6280F6;
@@ -25,7 +26,33 @@
 
     --radius: 1rem;
 
-    
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.875rem;
+    --fs-base: 1rem;
+    --fs-lg: 1.125rem;
+    --fs-xl: 1.5rem;
+    --fs-2xl: 2rem;
+    --fs-3xl: 2.5rem;
+    --fs-4xl: 3rem;
+    --fs-5xl: 3.75rem;
+    --fs-6xl: 4.5rem;
+    --fs-7xl: 6rem;
+
+    --sp-0: 0px;
+    --sp-1: 0.25rem;
+    --sp-2: 0.5rem;
+    --sp-4: 1rem;
+    --sp-8: 2rem;
+    --sp-16: 4rem;
+    --sp-32: 8rem;
+
+    --bp-xs: 480px;
+    --bp-sm: 640px;
+    --bp-md: 768px;
+    --bp-lg: 1024px;
+    --bp-xl: 1280px;
+    --bp-2xl: 1536px;
+
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -58,21 +85,13 @@
     --sidebar-ring: oklch(0.708 0 0);
 }
 
-
-@theme  {
+@theme {
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
-    --radius-lg: var(--radius); /* 16px */
-    --radius-xl: calc(var(--radius) + 4px); /* 20px */
-    --radius-2xl: calc(var(--radius) + 8px); /* 24px */
-    --radius-3xl: calc(var(--radius) + 14px); /* 30px */
-
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --color-card: var(--card);
-    --color-card-foreground: var(--card-foreground);
-    --color-popover: var(--popover);
-    --color-popover-foreground: var(--popover-foreground);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 14px);
 
     --color-primary: var(--primary);
     --color-primary-100: var(--primary-100);
@@ -96,9 +115,39 @@
     --color-tertiary-500: var(--tertiary-500);
     --color-tertiary-600: var(--tertiary-600);
 
+    --text-xs: var(--fs-xs);
+    --text-sm: var(--fs-sm);
+    --text-base: var(--fs-base);
+    --text-lg: var(--fs-lg);
+    --text-xl: var(--fs-xl);
+    --text-2xl: var(--fs-2xl);
+    --text-3xl: var(--fs-3xl);
+    --text-4xl: var(--fs-4xl);
+    --text-5xl: var(--fs-5xl);
+    --text-6xl: var(--fs-6xl);
+    --text-7xl: var(--fs-7xl);
 
+    --spacing-0: var(--sp-0);
+    --spacing-1: var(--sp-1);
+    --spacing-2: var(--sp-2);
+    --spacing-4: var(--sp-4);
+    --spacing-8: var(--sp-8);
+    --spacing-16: var(--sp-16);
+    --spacing-32: var(--sp-32);
 
+    /* --breakpoint-xs: var(--bp-xs);
+    --breakpoint-sm: var(--bp-sm);
+    --breakpoint-md: var(--bp-md);
+    --breakpoint-lg: var(--bp-lg);
+    --breakpoint-xl: var(--bp-xl);
+    --breakpoint-2xl: var(--bp-2xl); */
 
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
     --color-primary-foreground: var(--primary-foreground);
     --color-secondary: var(--secondary);
     --color-secondary-foreground: var(--secondary-foreground);
@@ -125,11 +174,7 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
-
-
 @layer base {
-  
-
     * {
         @apply border-border outline-ring/50;
     }
