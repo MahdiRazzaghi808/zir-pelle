@@ -25,6 +25,7 @@ export type InputProps = Omit<ComponentProps<"input">, "value"> & {
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   onlyLatin?: boolean;
+  isError?: boolean;
   textAlign?: "left" | "right";
   placeholderAlign?: "left" | "right";
 } & VariantProps<typeof inputVariants>;
@@ -40,6 +41,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       onlyLatin = false,
       textAlign = "right",
       placeholderAlign = "right",
+      isError,
       onChange,
       ...props
     },
@@ -55,6 +57,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             inputVariants({ variant }),
             `text-${textAlign}`,
             `placeholder:text-${placeholderAlign}`,
+            isError ? "!text-[#FF3E3E] !border-[#FF3E3E] bg-[#fef0ef]" : ""
+            ,
             className
           )}
           onChange={(e) => {

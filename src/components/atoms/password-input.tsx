@@ -6,10 +6,11 @@ import { Button } from './button';
 
 interface PasswordInputProps extends InputProps {
   isCheckShow?: boolean;
+  isError?: boolean;
 }
 
 const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ className, isCheckShow, ...props }, ref) => {
+  ({ className, isCheckShow, isError, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState(0);
     const [isFocused, setIsFocused] = useState(false);
@@ -58,10 +59,11 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onKeyDown={handleKeyDown}
-          // onCopy={handleBlockCopyPaste}
-          // onPaste={handleBlockCopyPaste}
-          // onCut={handleBlockCopyPaste}
-          // onContextMenu={handleContextMenu}
+          onCopy={handleBlockCopyPaste}
+          onPaste={handleBlockCopyPaste}
+          onCut={handleBlockCopyPaste}
+          onContextMenu={handleContextMenu}
+          isError={isError}
         />
 
         <Button
@@ -73,9 +75,9 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           onClick={() => setShowPassword((prev) => !prev)}
         >
           {showPassword ? (
-            <EyeIcon className="h-4 w-4" aria-hidden="true" />
+            <EyeIcon className={cn("h-5 w-5", isError && 'text-[#FF3E3E]')} aria-hidden="true" />
           ) : (
-            <EyeOffIcon className="h-4 w-4" aria-hidden="true" />
+            <EyeOffIcon className={cn("h-5 w-5", isError && 'text-[#FF3E3E]')} aria-hidden="true" />
           )}
           <span className="sr-only">
             {showPassword ? 'Hide password' : 'Show password'}
@@ -88,15 +90,14 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             tabIndex={-1}
           >
             <div
-              className={`h-1 rounded ${
-                passwordStrength === 0
-                  ? 'bg-gray-200'
-                  : passwordStrength <= 2
-                    ? 'bg-red-500'
-                    : passwordStrength <= 4
-                      ? 'bg-yellow-500'
-                      : 'bg-green-500'
-              }`}
+              className={`h-1 rounded ${passwordStrength === 0
+                ? 'bg-gray-200'
+                : passwordStrength <= 2
+                  ? 'bg-red-500'
+                  : passwordStrength <= 4
+                    ? 'bg-yellow-500'
+                    : 'bg-green-500'
+                }`}
               style={{ width: `${(passwordStrength / 5) * 100}%` }}
             ></div>
           </div>

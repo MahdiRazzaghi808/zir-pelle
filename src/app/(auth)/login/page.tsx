@@ -2,114 +2,47 @@
 
 // React & Next
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-// Third-party libraries
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+// Constants
+import AuthenticationPage from "@/components/templates/auth/authentication";
+import OtpPage from "@/components/templates/auth/otpPage";
+import PasswordPage from "@/components/templates/auth/passwordPage";
 
-// Types & Schemas
-import { postLoginSchema } from "@/api/services/core/auth/login/post/post-login.schema";
-import { PostLoginRequest } from "@/api/services/core/auth/login/post/post-login.types";
+// Step Types
+type Step = "phone" | "otp" | "password";
 
-// API Hooks
-import { usePostLogin } from "@/api/services/core/auth/login/post/use-post-login";
+export default function LoginSteps() {
+  const [step, setStep] = useState<Step>("password");
 
-// UI Components (Atoms)
-import { Button } from "@/components/atoms/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage
-} from "@/components/atoms/form";
-import { Input } from "@/components/atoms/input";
+  // Load from session on mount
+  useEffect(() => {
+    const savedStep = sessionStorage.getItem("login-step") as Step;
+    // const savedPhone = sessionStorage.getItem("login-phone");
+    if (savedStep) setStep(savedStep);
+    // if (savedPhone) setPhone(savedPhone);
+  }, []);
 
-// Constants / i18n
-import t from "@/json/fa.json";
-
-export default function LoginPage() {
-  const searchParams = useSearchParams();
-  const next = searchParams.get("next");
-
-  const form = useForm<PostLoginRequest>({
-    resolver: zodResolver(postLoginSchema.request),
-  });
-
-  const mutation = usePostLogin({
-    onSuccess: (data) => {
-      if (data?.data?.isSuccess) {
-        // window.location.href = next || '/';
-      } else {
-        toast.error(t.toast.error.auth);
-      }
-    },
-
-  });
+  // Save to session on change
+  useEffect(() => {
+    sessionStorage.setItem("login-step", step);
+  }, [step]);
 
   return (
-    <div className="w-full h-screen flex  items-center justify-center">
-      <div className="w-full max-w-md mx-auto md:border-1  border-black/20 rounded-3xl p-6">
-        <Form {...form}>
-          <form
-            autoComplete="off"
-            className="space-y-5"
-            onSubmit={form.handleSubmit((data) => {
-              mutation.mutate({
-                phoneNumber: data.phoneNumber.trim(),
-              });
-            })}
-          >
-            <Image
-              src="/images/login-logo.svg"
-              alt=""
-              width={100}
-              height={100}
-              className="mx-auto block"
-            />
+    <div className="w-full h-screen flex items-center justify-center">
+      <div className="w-full max-w-md mx-auto md:border border-black/20 rounded-3xl p-6">
+        <Image
+          src="/images/login-logo.svg"
+          alt="login"
+          width={100}
+          height={100}
+          className="mx-auto mb-4"
+        />
 
-
-            <div className="flex flex-col gap-4 justify-center">
-              <h1 className="text-xl font-bold">ورود یا ثبت نام</h1>
-              <p>برای ورود یا ثبت نام شماره همراه خود را وارد کنید</p>
-            </div>
-
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      autoComplete="off"
-                      type=""
-                      placeholder="شماره همراه"
-                      className="pr-6"
-                      disabled={mutation.isPending}
-                      textAlign="left"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="-bottom-5 right-4" />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={mutation.isPending}
-            >
-              {mutation.isPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "ادامه"
-              )}
-            </Button>
-          </form>
-        </Form>
+        {/* Step View Switcher */}
+        {step === "phone" && (<AuthenticationPage />)}
+        {step === "otp" && (<OtpPage />)}
+        {step === "password" && (<PasswordPage />)}
       </div>
     </div>
   );
