@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default: 'bg-primary text-white hover:bg-primary-600/80',
         destructive: 'bg-[#E53935] text-white hover:bg-[#E53935]/80',
         success: 'bg-emerald-600 text-white hover:bg-emerald-600/80',
-        outline: 'border border-slate-800  text-slate-800',
+        outline: 'border border-primary text-primary',
         secondary: 'bg-white text-slate-800 hover:bg-white/70',
         ghost: 'hover:bg-slate-200 hover:text-slate-800',
         link: 'text-slate-800 underline-offset-4 hover:underline',

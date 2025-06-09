@@ -3,4 +3,5 @@
 export type IconName =
 	| "arrow_left"
 	| "edit"
+	| "home"
 	| "login-logo"

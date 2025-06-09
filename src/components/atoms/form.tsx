@@ -108,7 +108,7 @@ const FormLabel = forwardRef<
   const { formItemId, rules } = useFormField();
 
   return (
-    <Label ref={ref} className={cn(className)} htmlFor={formItemId} {...props}>
+    <Label ref={ref} className={cn("mb-2 text-[22px] font-normal", className)} htmlFor={formItemId} {...props}>
       {props.children}
       <span className={cn(!rules?.required && 'hidden', 'text-red-500')}>
         {' '}

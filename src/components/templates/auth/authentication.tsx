@@ -35,6 +35,7 @@ export default function AuthenticationPage() {
     const searchParams = useSearchParams();
     const next = searchParams.get("next");
     const [phone, setPhone] = useState("");
+    
     const form = useForm<PostLoginRequest>({
         resolver: zodResolver(postLoginSchema.request),
         defaultValues: {
