@@ -10,22 +10,22 @@ import OtpPage from "@/components/templates/auth/otpPage";
 import PasswordPage from "@/components/templates/auth/passwordPage";
 
 // Step Types
-type Step = "phone" | "otp" | "password";
+export type Step = "phone" | "otp" | "password";
 
 export default function LoginSteps() {
-  const [step, setStep] = useState<Step>("password");
+  const [step, setStep] = useState<Step>("phone");
 
   // Load from session on mount
   useEffect(() => {
-    const savedStep = sessionStorage.getItem("login-step") as Step;
+    // const savedStep = sessionStorage.getItem("login-step") as Step;
     // const savedPhone = sessionStorage.getItem("login-phone");
-    if (savedStep) setStep(savedStep);
+    // if (savedStep) setStep(savedStep);
     // if (savedPhone) setPhone(savedPhone);
   }, []);
 
   // Save to session on change
   useEffect(() => {
-    sessionStorage.setItem("login-step", step);
+    // sessionStorage.setItem("login-step", step);
   }, [step]);
 
   return (
@@ -40,8 +40,8 @@ export default function LoginSteps() {
         />
 
         {/* Step View Switcher */}
-        {step === "phone" && (<AuthenticationPage />)}
-        {step === "otp" && (<OtpPage />)}
+        {step === "phone" && (<AuthenticationPage setStep={setStep} />)}
+        {step === "otp" && (<OtpPage setStep={setStep} />)}
         {step === "password" && (<PasswordPage />)}
       </div>
     </div>

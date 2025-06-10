@@ -69,7 +69,7 @@ export const coreApiMutationResponseSchema = <T>(schema?: z.ZodType<T>) => {
 export type CoreSortType = 'asc' | 'desc' | null;
 
 export const coreApi: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -92,7 +92,7 @@ coreApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
 coreApi.interceptors.response.use(
   (response) => response,
-  async (error: AxiosError<{ errors?: string[]; detail?: string }>) => {
+  async (error: AxiosError<{ error?: string; detail?: string }>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -123,15 +123,17 @@ coreApi.interceptors.response.use(
       }
     }
 
-    if (error.response?.data?.detail) {
-      toast.error(error.response?.data?.detail || t.toast.error.common);
-    } else {
-      Object.values(
-        error.response?.data?.errors || { '': [t.toast.error.common] },
-      ).map((item) => {
-        toast.error(item || t.toast.error.common);
-      });
+    if (error.response?.data?.error) {
+      toast.error(error.response?.data?.error || t.toast.error.common);
     }
+
+    // else {
+    //   Object.values(
+    //     error.response?.data?.errors || { '': [t.toast.error.common] },
+    //   ).map((item) => {
+    //     toast.error(item || t.toast.error.common);
+    //   });
+    // }
 
     return Promise.reject(error);
   },

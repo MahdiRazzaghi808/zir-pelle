@@ -45,7 +45,7 @@ export default function PasswordPage() {
 
     const mutation = usePostLogin({
         onSuccess: (data) => {
-            if (data?.data?.isSuccess) {
+            if (data?.data) {
                 // window.location.href = next || '/';
             } else {
                 toast.error(t.toast.error.auth);

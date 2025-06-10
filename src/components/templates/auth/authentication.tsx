@@ -11,11 +11,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 // Types & Schemas
-import { postLoginSchema } from "@/api/services/core/auth/login/post/post-login.schema";
-import { PostLoginRequest } from "@/api/services/core/auth/login/post/post-login.types";
+import { postRequestOtpSchema } from "@/api/services/core/auth/request-otp/post/post-request-otp.schema";
+import { PostRequestOtpRequest } from "@/api/services/core/auth/request-otp/post/post-request-otp.types";
 
 // API Hooks
-import { usePostLogin } from "@/api/services/core/auth/login/post/use-post-login";
+import { usePostRequestOtp } from "@/api/services/core/auth/request-otp/post/use-post-request-otp";
 
 // UI Components (Atoms)
 import { Button } from "@/components/atoms/button";
@@ -30,40 +30,45 @@ import { Input } from "@/components/atoms/input";
 
 // Constants / i18n
 import t from "@/json/fa.json";
+import { Step } from "@/app/(auth)/login/page";
 
-export default function AuthenticationPage() {
-    const searchParams = useSearchParams();
-    const next = searchParams.get("next");
-    const [phone, setPhone] = useState("");
-    
-    const form = useForm<PostLoginRequest>({
-        resolver: zodResolver(postLoginSchema.request),
-        defaultValues: {
-            phoneNumber: phone,
-        },
+interface AuthenticationPageProps {
+    setStep: React.Dispatch<React.SetStateAction<Step>>;
+}
+export default function AuthenticationPage({ setStep }: AuthenticationPageProps) {
+
+    const form = useForm<PostRequestOtpRequest>({
+        resolver: zodResolver(postRequestOtpSchema.request),
+
     });
 
-    const mutation = usePostLogin({
+    const mutation = usePostRequestOtp({
         onSuccess: (data) => {
-            if (data?.data?.isSuccess) {
+            console.log(data.data);
+
+            if (data?.status === 200) {
                 toast.success("کد تایید ارسال شد");
-                // setStep("otp");
+                setStep("otp");
             } else {
                 toast.error(t.toast.error.auth);
             }
         },
+        onError: (error) => {
+            console.log(error.message);
+
+            toast.error(error.message);
+        }
     });
 
-    const handlePhoneSubmit = (data: PostLoginRequest) => {
-        const trimmedPhone = data.phoneNumber.trim();
-        setPhone(trimmedPhone);
-        mutation.mutate({ phoneNumber: trimmedPhone });
+    const handlePhoneSubmit = (data: PostRequestOtpRequest) => {
+        const trimmedPhone = data.phone_number.trim();
+        mutation.mutate({ phone_number: trimmedPhone });
     };
 
     // Save to session on change
     useEffect(() => {
-        sessionStorage.setItem("phone", phone);
-    }, [phone]);
+        sessionStorage.setItem("phone", form.getValues("phone_number"));
+    }, [form.getValues("phone_number")]);
 
     return (
         <div className="w-full mx-auto ">
@@ -80,7 +85,7 @@ export default function AuthenticationPage() {
 
                     <FormField
                         control={form.control}
-                        name="phoneNumber"
+                        name="phone_number"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
@@ -90,6 +95,7 @@ export default function AuthenticationPage() {
                                         className="pr-6"
                                         disabled={mutation.isPending}
                                         textAlign="left"
+                                        placeholderAlign="right"
                                         {...field}
                                     />
                                 </FormControl>

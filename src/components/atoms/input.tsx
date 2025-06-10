@@ -47,6 +47,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+
     return (
       <div className="relative flex items-center w-full">
         {startIcon}
