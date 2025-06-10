@@ -5,7 +5,6 @@ import type {
 } from "@/api/types/api.types";
 import { useMutation } from "@tanstack/react-query";
 import { postForgotPassOtp } from "./post-forgot-pass-otp";
-import {} from "./post-forgot-pass-otp.schema";
 import type {
   PostForgotPassOtpRequest,
   PostForgotPassOtpResponseTransformed,

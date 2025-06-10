@@ -11,10 +11,10 @@ import ForgetPasswordPage from "@/components/templates/auth/forgetPassword";
 import ResetPasswordPage from "@/components/templates/auth/resetPassword";
 
 // Step Types
-type Step = "phone" | "reset-password";
+export type ForgetPasswordStep = "phone" | "reset-password";
 
 export default function LoginSteps() {
-    const [step, setStep] = useState<Step>("reset-password");
+    const [step, setStep] = useState<ForgetPasswordStep>("phone");
 
     // Load from session on mount
     useEffect(() => {
@@ -41,7 +41,7 @@ export default function LoginSteps() {
                 />
 
                 {/* Step View Switcher */}
-                {step === "phone" && (<ForgetPasswordPage />)}
+                {step === "phone" && (<ForgetPasswordPage  setStep={setStep}/>)}
                 {step === "reset-password" && (<ResetPasswordPage />)}
             </div>
         </div>

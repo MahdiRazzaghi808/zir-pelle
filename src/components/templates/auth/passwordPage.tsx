@@ -34,6 +34,7 @@ import { InputOTPPattern } from "@/components/organisms/auth/otp";
 import { useState } from "react";
 import { Icon } from "@/components/atoms/icon";
 import { PasswordInput } from "@/components/atoms/password-input";
+import Link from "next/link";
 
 export default function PasswordPage() {
     const searchParams = useSearchParams();
@@ -96,9 +97,9 @@ export default function PasswordPage() {
                     />
 
                     <div className="flex flex-col items-start">
-                        <Button size="sm" className="px-4 bg-transparent hover:bg-primary-100 text-primary-700 rounded-xs text-base font-medium">
+                        <Link  href="forget-password" className="px-4 bg-transparent hover:bg-primary-100 text-primary-700 rounded-xs text-base font-medium">
                             <span>فراموشی رمز عبور</span>
-                        </Button>
+                        </Link>
 
                         <Button size="sm" className="px-4 bg-transparent hover:bg-primary-100 text-primary-700 rounded-xs text-base font-medium">
                             <span>ورود با کد یکبار مصرف</span>

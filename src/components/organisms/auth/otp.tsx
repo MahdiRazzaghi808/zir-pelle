@@ -10,7 +10,7 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 
 interface Props {
   error: boolean;
-  disabled: boolean;
+  disabled?: boolean;
   value: string;
   onChange: (val: string) => void;
 }

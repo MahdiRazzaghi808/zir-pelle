@@ -5,11 +5,10 @@ import t from '@/json/fa.json';
 // Request
 export const postPasswordResetRequestSchemaTransformed = z
   .object({
-    id: z.number().int(),
-    title: z
-      .string({ message: t.form.validation.required })
-      .nonempty({ message: t.form.validation.required }),
-    isActive: z.boolean(),
+    phone_number: z.string(),
+    otp: z.string(),
+    password: z.string(),
+    password_confirmation: z.string(),
   })
   .transform((data) => data);
 

@@ -1,8 +1,7 @@
 "use client";
 
 // React & Next
-import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 // Third-party libraries
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,11 +10,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 // Types & Schemas
-import { postLoginSchema } from "@/api/services/core/auth/login/post/post-login.schema";
-import { PostLoginRequest } from "@/api/services/core/auth/login/post/post-login.types";
+import { postForgotPassOtpSchema } from "@/api/services/core/auth/password/forgot/post/post-forgot-pass-otp.schema";
+import { PostForgotPassOtpRequest } from "@/api/services/core/auth/password/forgot/post/post-forgot-pass-otp.types";
 
 // API Hooks
-import { usePostLogin } from "@/api/services/core/auth/login/post/use-post-login";
+import { usePostForgotPassOtp } from "@/api/services/core/auth/password/forgot/post/use-post-forgot-pass-otp";
+
 
 // UI Components (Atoms)
 import { Button } from "@/components/atoms/button";
@@ -30,23 +30,25 @@ import { Input } from "@/components/atoms/input";
 
 // Constants / i18n
 import t from "@/json/fa.json";
-import { InputOTPPattern } from "@/components/organisms/auth/otp";
-import { useState } from "react";
-import { Icon } from "@/components/atoms/icon";
-import { PasswordInput } from "@/components/atoms/password-input";
+import { ForgetPasswordStep } from "@/app/(auth)/forget-password/page";
 
-export default function ForgetPasswordPage() {
-    const searchParams = useSearchParams();
-    const next = searchParams.get("next");
 
-    const form = useForm<PostLoginRequest>({
-        resolver: zodResolver(postLoginSchema.request),
+interface ForgetPasswordPageProps {
+    setStep: React.Dispatch<React.SetStateAction<ForgetPasswordStep>>;
+}
+
+export default function ForgetPasswordPage({ setStep }: ForgetPasswordPageProps) {
+
+
+    const form = useForm<PostForgotPassOtpRequest>({
+        resolver: zodResolver(postForgotPassOtpSchema.request),
     });
 
-    const mutation = usePostLogin({
+    const mutation = usePostForgotPassOtp({
         onSuccess: (data) => {
-            if (data?.data?.isSuccess) {
-                // window.location.href = next || '/';
+            if (data.status === 200) {
+                sessionStorage.setItem("phone", form.getValues("phone_number"));
+                setStep("reset-password")
             } else {
                 toast.error(t.toast.error.auth);
             }
@@ -62,7 +64,7 @@ export default function ForgetPasswordPage() {
                     className="space-y-4"
                     onSubmit={form.handleSubmit((data) => {
                         mutation.mutate({
-                            phoneNumber: data.phoneNumber.trim(),
+                            phone_number: data.phone_number.trim(),
                         });
                     })}
                 >
@@ -78,7 +80,7 @@ export default function ForgetPasswordPage() {
 
                     <FormField
                         control={form.control}
-                        name="phoneNumber"
+                        name="phone_number"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
@@ -97,9 +99,9 @@ export default function ForgetPasswordPage() {
                     />
 
                     <div className="flex flex-col items-start">
-                        <Button size="sm" className="px-4 bg-transparent hover:bg-primary-100 text-primary-700 rounded-xs text-base font-medium">
+                        <Link href="login" className="px-4 bg-transparent hover:bg-primary-100 text-primary-700 rounded-xs text-base font-medium">
                             <span>ورود با کد یکبار مصرف</span>
-                        </Button>
+                        </Link>
                     </div>
 
                     <Button

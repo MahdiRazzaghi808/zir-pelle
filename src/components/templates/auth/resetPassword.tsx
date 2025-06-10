@@ -10,11 +10,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 // Types & Schemas
-import { postLoginSchema } from "@/api/services/core/auth/login/post/post-login.schema";
-import { PostLoginRequest } from "@/api/services/core/auth/login/post/post-login.types";
-
+import { PostPasswordResetRequest } from "@/api/services/core/auth/password/reset/post/post-password-reset.types";
+import { postPasswordResetSchema } from "@/api/services/core/auth/password/reset/post/post-password-reset.schema";
 // API Hooks
-import { usePostLogin } from "@/api/services/core/auth/login/post/use-post-login";
+import { usePostPasswordReset } from "@/api/services/core/auth/password/reset/post/use-post-password-reset";
 
 // UI Components (Atoms)
 import { Button } from "@/components/atoms/button";
@@ -30,18 +29,24 @@ import {
 import { PasswordInput } from "@/components/atoms/password-input";
 import t from "@/json/fa.json";
 import { InputOTPPattern } from "@/components/organisms/auth/otp";
+import { useEffect, useState } from "react";
+import { postForgotPassOtp } from "@/api/services/core/auth/password/forgot/post/post-forgot-pass-otp";
+
 
 export default function ResetPasswordPage() {
     const searchParams = useSearchParams();
     const next = searchParams.get("next");
 
-    const form = useForm<PostLoginRequest>({
-        resolver: zodResolver(postLoginSchema.request),
+    const form = useForm<PostPasswordResetRequest>({
+        resolver: zodResolver(postPasswordResetSchema.request),
+        defaultValues: {
+            phone_number: sessionStorage.getItem("phone") || '',
+        }
     });
 
-    const mutation = usePostLogin({
+    const mutation = usePostPasswordReset({
         onSuccess: (data) => {
-            if (data?.data?.isSuccess) {
+            if (data.status === 200) {
                 // window.location.href = next || '/';
             } else {
                 toast.error(t.toast.error.auth);
@@ -49,6 +54,47 @@ export default function ResetPasswordPage() {
         },
 
     });
+
+
+    const [secondsLeft, setSecondsLeft] = useState(5);
+    const [resendPending, setResendPending] = useState(false);
+
+    useEffect(() => {
+        if (secondsLeft <= 0) return;
+
+        const timer = setInterval(() => {
+            setSecondsLeft((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [secondsLeft]);
+
+    const formatTime = (totalSeconds: number) => {
+        const minutes = Math.floor(totalSeconds / 60)
+            .toString()
+            .padStart(1, "0");
+        const seconds = (totalSeconds % 60).toString().padStart(2, "0");
+        return `${minutes}:${seconds}`;
+    };
+
+    const handleResendCode = async () => {
+        try {
+            setResendPending(true);
+
+            const data = await postForgotPassOtp({ phone_number: sessionStorage.getItem("phone") || "" });
+            if (data?.status === 200) {
+                setSecondsLeft(120);
+                toast.success("کد مجدد ارسال شد");
+            } else {
+                toast.error("خطا در ارسال کد");
+            }
+        } catch (error) {
+            toast.error("خطای غیرمنتظره");
+        } finally {
+            setResendPending(false);
+        }
+    };
+    const isDisabled = mutation.isPending || resendPending;
 
     return (
         <div className="w-full mx-auto ">
@@ -58,7 +104,10 @@ export default function ResetPasswordPage() {
                     className="space-y-4"
                     onSubmit={form.handleSubmit((data) => {
                         mutation.mutate({
-                            phoneNumber: data.phoneNumber.trim(),
+                            phone_number: sessionStorage.getItem("phone") || "",
+                            otp: data.otp,
+                            password: data.password.trim(),
+                            password_confirmation: data.password_confirmation.trim(),
                         });
                     })}
                 >
@@ -76,45 +125,41 @@ export default function ResetPasswordPage() {
 
                         <FormField
                             control={form.control}
-                            name="phoneNumber"
+                            name="otp"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <InputOTPPattern value={field.value} onChange={field.onChange} error={!!form.formState.errors.phoneNumber} />
+                                        <InputOTPPattern value={field.value} onChange={field.onChange} error={!!form.formState.errors.otp} />
                                     </FormControl>
                                     <FormMessage className="-bottom-5 right-4" />
                                 </FormItem>
                             )}
                         />
 
-                        <p className="text-center text-primary-700 cursor-pointer">
-                            <span>
-                                ارسال مجدد کد
-                            </span>
-                            <span>
-                                تا
-                            </span>
-                            {" "}
-                            <span>
-                                1:54
-                            </span>
-                            {" "}
-                            <span>
-                                دیگر
-                            </span>
-                        </p>
+                        {secondsLeft > 0 ? (
+                            <p className="text-center text-primary-700">
+                                ارسال مجدد کد تا {formatTime(secondsLeft)} دیگر
+                            </p>
+                        ) : (
+                            <p
+                                className={`text-center text-primary-700 cursor-pointer ${isDisabled ? "opacity-50 pointer-events-none" : ""}`}
+                                onClick={handleResendCode}
+                            >
+                                {resendPending ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "ارسال مجدد کد"}
+                            </p>
+                        )}
                     </div>
 
                     <FormField
                         control={form.control}
-                        name="phoneNumber"
+                        name="password"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
                                     <PasswordInput
                                         disabled={mutation.isPending}
                                         textAlign="left"
-                                        isError={!!form.formState.errors.phoneNumber}
+                                        isError={!!form.formState.errors.password}
                                         placeholder="رمز عبور جدید"
                                         {...field}
                                     />
@@ -125,14 +170,14 @@ export default function ResetPasswordPage() {
                     />
                     <FormField
                         control={form.control}
-                        name="phoneNumber"
+                        name="password_confirmation"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
                                     <PasswordInput
                                         disabled={mutation.isPending}
                                         textAlign="left"
-                                        isError={!!form.formState.errors.phoneNumber}
+                                        isError={!!form.formState.errors.password_confirmation}
                                         placeholder="تکرار رمز عبور جدید"
                                         {...field}
                                     />
