@@ -49,13 +49,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
 
     return (
-      <div className="relative flex items-center w-full">
-        {startIcon}
+      <div className={cn("relative flex items-center w-full")}>
+        <div className="absolute right-4 top-1/2 -translate-y-1/2">{startIcon}</div>
         <input
           ref={ref}
           value={onChange ? value || "" : value ?? undefined}
           className={cn(
             inputVariants({ variant }),
+            startIcon && "pr-10",
+            endIcon && "pl-10",
             `text-${textAlign}`,
             `placeholder:text-${placeholderAlign}`,
             isError ? "!text-[#FF3E3E] !border-[#FF3E3E] bg-[#fef0ef]" : ""
@@ -82,7 +84,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           }}
           {...props}
         />
-        {endIcon}
+        <div className="absolute left-4 top-1/2 -translate-y-1/2">{endIcon}</div>
+
       </div>
     );
   }

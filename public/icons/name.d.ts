@@ -3,5 +3,8 @@
 export type IconName =
 	| "arrow_left"
 	| "edit"
+	| "home-fiil"
+	| "home-fill"
 	| "home"
 	| "login-logo"
+	| "Search"
