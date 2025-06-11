@@ -26,10 +26,10 @@ export default function Home() {
   };
 
 
-  
+
   return (
     <div className="md:h-screen">
-      {/* <div className="w-full h-full flex flex-col justify-center items-center dir-rtl">
+      <div className="w-full h-full flex flex-col justify-center items-center dir-rtl">
         <div className="md:w-xl mx-auto  flex flex-col gap-4 justify-center items-center">
           <Image
             src="/images/login-logo.svg"
@@ -52,7 +52,7 @@ export default function Home() {
 
       <div className="hidden md:block fixed bottom-0 w-screen bg-primary-200 py-2 text-center">
         حقوق این سایت متعلق به سایت زیرپله است
-      </div> */}
+      </div>
 
       {/* <Accordion
         type="single"
@@ -68,8 +68,8 @@ export default function Home() {
           <AccordionTrigger>عنوان دوم</AccordionTrigger>
           <AccordionContent>این محتوای آکاردئون دوم است.</AccordionContent>
         </AccordionItem>
-      </Accordion> */}
-      <ExampleCombobox options={frameworks} onChange={handleChange} />
+      </Accordion>
+      {/* <ExampleCombobox options={frameworks} onChange={handleChange} /> */}
     </div>
   );
 }
