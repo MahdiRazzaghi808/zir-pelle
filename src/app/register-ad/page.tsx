@@ -44,7 +44,7 @@ function page() {
 
     const mutation = usePostLogin({
         onSuccess: (data) => {
-            if (data?.data?.isSuccess) {
+            if (data?.data) {
                 toast.success("کد تایید ارسال شد");
                 // setStep("otp");
             } else {

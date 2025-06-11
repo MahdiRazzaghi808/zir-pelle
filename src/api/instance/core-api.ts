@@ -72,6 +72,8 @@ export const coreApi: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'credentials': 'include'    
+
   },
   withCredentials: true, // Enable sending HttpOnly cookies
 });

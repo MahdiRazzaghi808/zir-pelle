@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   const mutation = usePostLogin({
     onSuccess: (data) => {
-      if (data?.data?.isSuccess) {
+      if (data?.data) {
         // window.location.href = next || '/';
       } else {
         toast.error(t.toast.error.auth);
@@ -63,8 +63,8 @@ export default function LoginPage() {
             className="space-y-7"
             onSubmit={form.handleSubmit((data) => {
               mutation.mutate({
-                email: data.email.toString(),
-                password: data.password.toString(),
+                phoneNumber: data.phoneNumber.toString(),
+                // password: data.password.toString(),
               });
             })}
           >
@@ -77,7 +77,7 @@ export default function LoginPage() {
             />
             <FormField
               control={form.control}
-              name="email"
+              name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>نام کاربری</FormLabel>
@@ -88,13 +88,13 @@ export default function LoginPage() {
                       className="bg-slate-100 pr-10"
                       disabled={mutation.isPending}
                       onlyLatin
-                      startIcon={
-                        <Icon
-                          id="profile-1"
-                          size={22}
-                          className="fill absolute right-3 -scale-x-100"
-                        />
-                      }
+                      // startIcon={
+                      //   <Icon
+                      //     id="profile-1"
+                      //     size={22}
+                      //     className="fill absolute right-3 -scale-x-100"
+                      //   />
+                      // }
                       {...field}
                     />
                   </FormControl>
@@ -102,7 +102,7 @@ export default function LoginPage() {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
@@ -115,20 +115,20 @@ export default function LoginPage() {
                       className="bg-slate-100 pr-10"
                       disabled={mutation.isPending}
                       onlyLatin
-                      startIcon={
-                        <Icon
-                          id="password"
-                          size={22}
-                          className="absolute right-3 -scale-x-100"
-                        />
-                      }
+                      // startIcon={
+                      //   <Icon
+                      //     id="password"
+                      //     size={22}
+                      //     className="absolute right-3 -scale-x-100"
+                      //   />
+                      // }
                       {...field}
                     />
                   </FormControl>
                   <FormMessage className="-bottom-5 right-4" />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <Button
               type="submit"

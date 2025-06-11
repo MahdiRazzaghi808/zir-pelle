@@ -47,23 +47,25 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-
     return (
       <div className={cn("relative flex items-center w-full")}>
-        <div className="absolute right-4 top-1/2 -translate-y-1/2">{startIcon}</div>
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 ">
+          {startIcon}
+        </div>
         <input
           ref={ref}
-          value={onChange ? value || "" : value ?? undefined}
+          value={onChange ? value || "" : (value ?? undefined)}
           className={cn(
             inputVariants({ variant }),
-            startIcon && "pr-10",
+            startIcon && "pr-10 ",
             endIcon && "pl-10",
-            `text-${textAlign}`,
-            `placeholder:text-${placeholderAlign}`,
-            isError ? "!text-[#FF3E3E] !border-[#FF3E3E] bg-[#fef0ef]" : ""
-            ,
+            placeholderAlign === "right"
+              ? `placeholder:text-right`
+              : `placeholder:text-left`,
+            isError ? "!text-[#FF3E3E] !border-[#FF3E3E] bg-[#fef0ef]" : "",
             className
           )}
+          dir={textAlign === "right" ? "rtl" : "ltr"}
           onChange={(e) => {
             if (!props.readOnly) {
               if (onlyLatin) {
@@ -84,8 +86,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           }}
           {...props}
         />
-        <div className="absolute left-4 top-1/2 -translate-y-1/2">{endIcon}</div>
 
+        <div className="absolute left-4 top-1/2 -translate-y-1/2">
+          {endIcon}
+        </div>
       </div>
     );
   }

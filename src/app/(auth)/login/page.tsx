@@ -37,7 +37,7 @@ export default function LoginSteps() {
           width={100}
           height={100}
           className="mx-auto mb-4"
-        />
+        />    
 
         {/* Step View Switcher */}
         {step === "phone" && (<AuthenticationPage setStep={setStep} />)}
