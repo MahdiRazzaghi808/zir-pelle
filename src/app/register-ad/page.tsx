@@ -33,6 +33,9 @@ import { Input } from "@/components/atoms/input";
 // Constants / i18n
 import t from "@/json/fa.json";
 import { Icon } from '@/components/atoms/icon'
+import CategorySelector from '@/components/organisms/register-ad/category-selector';
+import { Textarea } from '@/components/atoms/textarea';
+import LocationSelector from '@/components/organisms/register-ad/location-selector';
 
 
 function page() {
@@ -185,13 +188,7 @@ function page() {
                                         <FormLabel>دسته بندی</FormLabel>
 
                                         <FormControl>
-                                            <Input
-                                                autoComplete="off"
-                                                placeholder="لطفا دسته بندی مورد نظر خود را انتخاب کنید"
-                                                className=" border-none"
-                                                disabled={mutation.isPending}
-                                                {...field}
-                                            />
+                                            <CategorySelector />
                                         </FormControl>
                                         <FormMessage className="-bottom-5 right-4" />
                                     </FormItem>
@@ -205,10 +202,10 @@ function page() {
                                         <FormLabel>توضیحات</FormLabel>
 
                                         <FormControl>
-                                            <Input
+                                            <Textarea
                                                 autoComplete="off"
                                                 placeholder="توضیحات محصول یا خدمت خود را وارد کنید"
-                                                className=" border-none"
+                                                className=" border-none font-normal"
                                                 disabled={mutation.isPending}
                                                 {...field}
                                             />
@@ -236,13 +233,7 @@ function page() {
                                         <FormLabel>استان و شهر</FormLabel>
 
                                         <FormControl>
-                                            <Input
-                                                autoComplete="off"
-                                                placeholder="لطفا شهر خود را انتخاب کنید"
-                                                className=" border-none"
-                                                disabled={mutation.isPending}
-                                                {...field}
-                                            />
+                                            <LocationSelector />
                                         </FormControl>
                                         <FormMessage className="-bottom-5 right-4" />
                                     </FormItem>

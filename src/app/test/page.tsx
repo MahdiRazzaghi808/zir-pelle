@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, ChangeEvent } from "react";
 import { Input } from "@/components/atoms/input";
 import {
   Popover,
@@ -8,94 +8,119 @@ import {
   PopoverContent,
 } from "@/components/atoms/popover";
 import { Icon } from "@/components/atoms/icon";
+import { cn } from "@/utils/cn";
 
-interface Province {
+interface Category {
   id: number;
   name: string;
 }
 
-interface City {
+interface SubCategory {
   id: number;
   name: string;
-  province_id: number;
+  parent_id: number;
 }
 
-const provinces: Province[] = [
-  { id: 1, name: "تهران" },
-  { id: 2, name: "اصفهان" },
-  { id: 3, name: "فارس" },
-  { id: 4, name: "آذربایجان شرقی" },
+const parentCategories: Category[] = [
+  { id: 1, name: "کالای دیجیتال" },
+  { id: 2, name: "پوشاک" },
 ];
 
-const cities: City[] = [
-  { id: 101, name: "تهران", province_id: 1 },
-  { id: 102, name: "اسلام‌شهر", province_id: 1 },
-  { id: 103, name: "دماوند", province_id: 1 },
-  { id: 201, name: "اصفهان", province_id: 2 },
-  { id: 202, name: "کاشان", province_id: 2 },
-  { id: 203, name: "خمینی‌شهر", province_id: 2 },
-  { id: 301, name: "شیراز", province_id: 3 },
-  { id: 302, name: "مرودشت", province_id: 3 },
-  { id: 303, name: "کازرون", province_id: 3 },
-  { id: 401, name: "تبریز", province_id: 4 },
-  { id: 402, name: "مراغه", province_id: 4 },
-  { id: 403, name: "اهر", province_id: 4 },
+const subCategories: SubCategory[] = [
+  { id: 101, name: "موبایل", parent_id: 1 },
+  { id: 102, name: "لپ‌تاپ", parent_id: 1 },
+  { id: 201, name: "مانتو", parent_id: 2 },
+  { id: 202, name: "کفش", parent_id: 2 },
 ];
 
-function Page() {
-  const [selectedProvince, setSelectedProvince] = useState<Province | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [inputValue, setInputValue] = useState<string>("");
+function CategorySelector() {
+  const [selectedParent, setSelectedParent] = useState<Category | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [open, setOpen] = useState(false);
 
-  const handleProvinceSelect = (province: Province) => {
-    setSelectedProvince(province);
+  const handleParentSelect = (category: Category) => {
+    setSelectedParent(category);
     setSearchTerm("");
   };
 
-  const handleCitySelect = (city: City) => {
-    setInputValue(city.name);
+  const handleSubSelect = (sub: SubCategory) => {
+    setInputValue(sub.name);
+    setOpen(false);
+    setSelectedParent(null); // reset
   };
 
-  const filteredItems = selectedProvince
-    ? cities.filter(
-        (city) =>
-          city.province_id === selectedProvince.id &&
-          city.name.includes(searchTerm)
-      )
-    : provinces.filter((p) => p.name.includes(searchTerm));
+  const filteredItems = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+
+    if (selectedParent) {
+      return subCategories.filter(
+        (sub) =>
+          sub.parent_id === selectedParent.id &&
+          sub.name.toLowerCase().includes(term)
+      );
+    }
+
+    return parentCategories.filter((cat) =>
+      cat.name.toLowerCase().includes(term)
+    );
+  }, [selectedParent, searchTerm]);
 
   return (
     <div className="p-4 mx-auto">
       <div className="max-w-xl mx-auto">
-        <Popover>
+        <Popover open={open} onOpenChange={() => {
+          setSearchTerm("")
+          setSelectedParent(null)
+          setOpen(!open)
+
+        }}>
           <PopoverTrigger asChild>
             <Input
-              value={inputValue}
-              placeholder={selectedProvince ? "انتخاب شهر" : "انتخاب استان"}
-              endIcon={<Icon id="arrow_left" className="w-4 h-4 fill-secondary-500 -rotate-90" />}
+              value={inputValue || "لطفاً دسته‌بندی را انتخاب کنید"}
+              className="text-right cursor-pointer"
+              onClick={() => setOpen(!open)}
+              onChange={() => { }}
+              endIcon={
+                <Icon
+                  id="arrow_left"
+                  className={cn(
+                    open ? "rotate-90" : "-rotate-90",
+                    "w-4 h-4 fill-secondary-500"
+                  )}
+                />
+              }
+              readOnly
             />
           </PopoverTrigger>
           <PopoverContent className="min-w-full w-full">
             <Input
-              placeholder={selectedProvince ? "جستجوی شهر..." : "جستجوی استان..."}
+              placeholder={selectedParent ? "جستجوی زیرمجموعه..." : "جستجوی دسته‌بندی..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="mb-2"
-              startIcon={<Icon id="Search" className="w-5 h-5 cursor-pointer fill-secondary-500" />}
+              startIcon={
+                <Icon
+                  id="Search"
+                  className="w-5 h-5 cursor-pointer fill-secondary-500"
+                />
+              }
             />
-            <div className="max-h-60 overflow-auto space-y-1 w-full">
+            <div className="max-h-60 overflow-auto space-y-1 w-lg">
               {filteredItems.map((item) => (
                 <p
                   key={item.id}
                   className="flex justify-between items-center w-full py-2 cursor-pointer border-b"
-                  onClick={() =>
-                    selectedProvince
-                      ? handleCitySelect(item)
-                      : handleProvinceSelect(item)
-                  }
+                  onClick={() => {
+                    if (selectedParent) {
+                      handleSubSelect(item as SubCategory);
+                    } else {
+                      handleParentSelect(item as Category);
+                    }
+                  }}
                 >
                   <span>{item.name}</span>
-                  {!selectedProvince && (
+                  {!selectedParent && (
                     <Icon id="arrow_left" className="w-4 h-4" />
                   )}
                 </p>
@@ -108,4 +133,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default CategorySelector;
