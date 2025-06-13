@@ -30,11 +30,11 @@
     --fs-sm: 0.875rem;
     --fs-base: 1rem;
     --fs-lg: 1.125rem;
-    --fs-xl: 1.5rem;
-    --fs-2xl: 2rem;
-    --fs-3xl: 2.5rem;
-    --fs-4xl: 3rem;
-    --fs-5xl: 3.75rem;
+    --fs-xl: 1.25rem;
+    --fs-2xl: 1.5rem;
+    --fs-3xl: 1.75rem;
+    --fs-4xl: 2rem;
+    --fs-5xl: 2.25rem;
     --fs-6xl: 4.5rem;
     --fs-7xl: 6rem;
 
@@ -188,6 +188,11 @@
         inset 0 1px 2px #ffffff,
         0 5px 0 #d1d1d1;
 
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto
 }
 
 @layer base {
