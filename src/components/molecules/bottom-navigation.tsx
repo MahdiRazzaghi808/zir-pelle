@@ -17,7 +17,7 @@ const navItems: NavItem[] = [
         label: 'خانه',
         href: '/',
         icon: (
-            <Icon id='home' className='w-6 h-6 fill-[#D9D9D9]' />
+            <Icon id='home' className='w-6 h-6 ' />
         ),
         activeIcon: (
             <Icon id='home-fill' className='w-6 h-6' />
@@ -27,7 +27,7 @@ const navItems: NavItem[] = [
         label: 'دسته ها',
         href: '/categories',
         icon: (
-            <Icon id='category' className='w-6 h-6 fill-[#D9D9D9]' />
+            <Icon id='category' className='w-6 h-6 ' />
         ),
         activeIcon: (
             <Icon id='category-fill' className='w-6 h-6' />
@@ -35,9 +35,9 @@ const navItems: NavItem[] = [
     },
     {
         label: 'ثبت آگهی',
-        href: '/post',
+        href: '/register-ad',
         icon: (
-            <Icon id='add_notes' className='w-6 h-6 fill-[#D9D9D9]' />
+            <Icon id='add_notes' className='w-6 h-6 ' />
 
         ),
         activeIcon: (
@@ -46,19 +46,19 @@ const navItems: NavItem[] = [
     },
     {
         label: 'مدیریت آگهی',
-        href: '/ads',
+        href: '/dashboard/ad-management',
         icon: (
-            <Icon id='widgets' className='w-6 h-6 fill-[#D9D9D9]' />
+            <Icon id='widgets' className='w-6 h-6 ' />
         ),
         activeIcon: (
-            <Icon id='widgets' className='w-6 h-6 fill-[#D9D9D9]' />
+            <Icon id='widgets' className='w-6 h-6 ' />
         ),
     },
     {
         label: 'حساب من',
-        href: '/profile',
+        href: '/dashboard/profile',
         icon: (
-            <Icon id='person' className='w-6 h-6 fill-[#D9D9D9]' />
+            <Icon id='person' className='w-6 h-6 ' />
         ),
         activeIcon: (
             <Icon id='person-fill' className='w-6 h-6 ' />
@@ -79,8 +79,7 @@ const BottomNavigation: React.FC = () => {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex flex-col items-center transition-colors duration-200 ${isActive ? 'text-blue-600' : 'text-gray-600'
-                                }`}
+                            className={`flex flex-col items-center transition-colors duration-200 text-black/65 font-semibold`}
                         >
                             {isActive ? item.activeIcon : item.icon}
                             <span className="mt-1">{item.label}</span>
