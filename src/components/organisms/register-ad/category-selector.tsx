@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useMemo, ChangeEvent, useRef, useLayoutEffect } from "react";
+import React, {
+    useState,
+    useMemo,
+    useRef,
+    useLayoutEffect,
+    useEffect,
+} from "react";
 import { Input } from "@/components/atoms/input";
 import {
     Popover,
@@ -9,6 +15,11 @@ import {
 } from "@/components/atoms/popover";
 import { Icon } from "@/components/atoms/icon";
 import { cn } from "@/utils/cn";
+import {
+    Drawer,
+    DrawerTrigger,
+    DrawerContent,
+} from "@/components/atoms/drawer";
 
 interface Category {
     id: number;
@@ -39,6 +50,20 @@ function CategorySelector() {
     const [inputValue, setInputValue] = useState("");
     const [open, setOpen] = useState(false);
 
+    // مدیریت تشخیص موبایل یا دسکتاپ
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        function handleResize() {
+            setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+        }
+
+        handleResize(); // مقداردهی اولیه
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     const handleParentSelect = (category: Category) => {
         setSelectedParent(category);
         setSearchTerm("");
@@ -47,7 +72,7 @@ function CategorySelector() {
     const handleSubSelect = (sub: SubCategory) => {
         setInputValue(sub.name);
         setOpen(false);
-        setSelectedParent(null); // reset
+        setSelectedParent(null); // ریست انتخاب دسته‌بندی
     };
 
     const filteredItems = useMemo(() => {
@@ -73,75 +98,91 @@ function CategorySelector() {
         if (inputRef.current) {
             setTriggerWidth(inputRef.current.offsetWidth);
         }
-    }, [inputRef.current, inputValue, open]);
+    }, [inputValue, open]);
+
+    const InputTrigger = (
+        <Input
+            value={inputValue || "لطفاً دسته‌بندی را انتخاب کنید"}
+            className="text-right cursor-pointer"
+            onClick={() => setOpen(!open)}
+            onChange={() => { }}
+            endIcon={
+                <Icon
+                    id="arrow_left"
+                    className={cn(
+                        open ? "rotate-90" : "-rotate-90",
+                        "w-4 h-4 fill-secondary-500"
+                    )}
+                />
+            }
+            readOnly
+        />
+    );
+
+    const SearchBox = (
+        <>
+            <Input
+                placeholder={selectedParent ? "جستجوی زیرمجموعه..." : "جستجوی دسته‌بندی..."}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="mb-2 font-medium"
+                startIcon={
+                    <Icon
+                        id="Search"
+                        className="w-5 h-5 cursor-pointer fill-secondary-500"
+                    />
+                }
+            />
+            <div className="max-h-56 overflow-auto space-y-1">
+                {filteredItems.map((item) => (
+                    <p
+                        key={item.id}
+                        className="flex justify-between items-center w-full py-2 px-2 cursor-pointer border-b"
+                        onClick={() => {
+                            if (selectedParent) {
+                                handleSubSelect(item as SubCategory);
+                            } else {
+                                handleParentSelect(item as Category);
+                            }
+                        }}
+                    >
+                        <span>{item.name}</span>
+                        {!selectedParent && (
+                            <Icon id="arrow_left" className="w-4 h-4" />
+                        )}
+                    </p>
+                ))}
+            </div>
+        </>
+    );
 
     return (
-        <Popover open={open} onOpenChange={() => {
-            setSearchTerm("")
-            setSelectedParent(null)
-            setOpen(!open)
-
-        }}>
-            <PopoverTrigger asChild>
-                <div
-                    ref={inputRef} className="w-full"
-                >
-                    <Input
-                        value={inputValue || "لطفاً دسته‌بندی را انتخاب کنید"}
-                        className="text-right cursor-pointer"
-
-                        onClick={() => setOpen(!open)}
-                        onChange={() => { }}
-                        endIcon={
-                            <Icon
-                                id="arrow_left"
-                                className={cn(
-                                    open ? "rotate-90" : "-rotate-90",
-                                    "w-4 h-4 fill-secondary-500"
-                                )}
-                            />
-                        }
-                        readOnly
-                    />
-                </div>
-
-            </PopoverTrigger>
-            <PopoverContent className="!min-w-full w-full mt-2" style={{ width: triggerWidth }}
-            >
-                <Input
-                    placeholder={selectedParent ? "جستجوی زیرمجموعه..." : "جستجوی دسته‌بندی..."}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="mb-2"
-                    startIcon={
-                        <Icon
-                            id="Search"
-                            className="w-5 h-5 cursor-pointer fill-secondary-500"
-                        />
-                    }
-                />
-                <div className="max-h-60 overflow-auto space-y-1">
-                    {filteredItems.map((item) => (
-                        <p
-                            key={item.id}
-                            className="flex justify-between items-center w-full py-2 cursor-pointer border-b"
-                            onClick={() => {
-                                if (selectedParent) {
-                                    handleSubSelect(item as SubCategory);
-                                } else {
-                                    handleParentSelect(item as Category);
-                                }
-                            }}
-                        >
-                            <span>{item.name}</span>
-                            {!selectedParent && (
-                                <Icon id="arrow_left" className="w-4 h-4" />
-                            )}
-                        </p>
-                    ))}
-                </div>
-            </PopoverContent>
-        </Popover>
+        <div>
+            {isMobile ? (
+                <Drawer open={open} onOpenChange={setOpen}>
+                    <DrawerTrigger asChild>
+                        <div ref={inputRef} className="w-full">
+                            {InputTrigger}
+                        </div>
+                    </DrawerTrigger>
+                    <DrawerContent className="px-4 py-6">{SearchBox}</DrawerContent>
+                </Drawer>
+            ) : (
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                        <div ref={inputRef} className="w-full">
+                            {InputTrigger}
+                        </div>
+                    </PopoverTrigger>
+                    <PopoverContent
+                        className="!min-w-full w-full mt-2"
+                        style={{ width: triggerWidth }}
+                    >
+                        {SearchBox}
+                    </PopoverContent>
+                </Popover>
+            )}
+        </div>
     );
 }
 

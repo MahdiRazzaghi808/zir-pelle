@@ -36,6 +36,10 @@ import { Icon } from '@/components/atoms/icon'
 import CategorySelector from '@/components/organisms/register-ad/category-selector';
 import { Textarea } from '@/components/atoms/textarea';
 import LocationSelector from '@/components/organisms/register-ad/location-selector';
+import { RadioGroup, RadioGroupItem } from '@/components/atoms/radio-group';
+import { Checkbox } from '@/components/atoms/checkbox';
+import Uploader from '@/components/organisms/register-ad/uploader';
+import Link from 'next/link';
 
 
 function page() {
@@ -64,15 +68,21 @@ function page() {
 
     return (
         <div className='px-8 md:max-w-[800px] my-16 md:my-[92px] mx-auto'>
-            <div className='flex justify-between'>
-                <div className='flex flex-col gap-4'>
-                    <h1 className='font-bold text-2xl'>ثبت آگهی</h1>
-                    <p className='text-lg'>اطلاعات مربوط به آگهی را پر کنید</p>
+            <div className='flex flex-col gap-6'>
+                <div className='flex justify-between'>
+                    <h1 className='font-bold text-[1.7rem] sm:text-2xl'>ثبت آگهی</h1>
+                    <Link href="/" className='flex justify-center gap-2 items-center text-primary px-3 py-2 border border-primary rounded-lg md:rounded-3xl'>
+                        <p className='flex gap-1 font-normal'>
+                            <span className='hidden md:block'>بازگشت به</span>
+                            <span>صفحه اصلی</span>
+                        </p>
+
+                        <Icon id="home" className="fill-primary" />
+                    </Link>
                 </div>
-                <Button variant="outline" className='flex justify-center gap-4 items-center'>
-                    <span>بازگشت به صفحه اصلی</span>
-                    <Icon id="home" className="fill-primary" />
-                </Button>
+
+                <p className='text-lg'>اطلاعات مربوط به آگهی را پر کنید</p>
+
             </div>
 
 
@@ -126,6 +136,7 @@ function page() {
                                                     placeholder="32,000 | تومان"
                                                     className="border-none placeholder:text-lg font-semibold"
                                                     placeholderAlign='left'
+                                                    textAlign='left'
                                                     disabled={mutation.isPending}
                                                     {...field}
                                                 />
@@ -148,6 +159,7 @@ function page() {
                                                     className="border-none placeholder:text-lg font-semibold"
                                                     disabled={mutation.isPending}
                                                     placeholderAlign='left'
+                                                    textAlign='left'
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -170,6 +182,7 @@ function page() {
                                                     className="border-none placeholder:text-lg font-semibold"
                                                     disabled={mutation.isPending}
                                                     placeholderAlign='left'
+                                                    textAlign='left'
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -210,6 +223,7 @@ function page() {
                                                 {...field}
                                             />
                                         </FormControl>
+                                        <p className='mt-4'>1/2000 کلمه</p>
                                         <FormMessage className="-bottom-5 right-4" />
                                     </FormItem>
                                 )}
@@ -247,13 +261,11 @@ function page() {
                                         <FormLabel>نشانی</FormLabel>
 
                                         <FormControl>
-                                            <Input
-                                                autoComplete="off"
+                                            <Textarea 
+                                                className=" border-none font-normal"
                                                 placeholder="نشانی خود را وارد کنید"
-                                                className=" border-none"
                                                 disabled={mutation.isPending}
-                                                {...field}
-                                            />
+                                                {...field} />
                                         </FormControl>
                                         <FormMessage className="-bottom-5 right-4" />
                                     </FormItem>
@@ -277,13 +289,20 @@ function page() {
                                         <FormLabel>وضعیت کالا</FormLabel>
 
                                         <FormControl>
-                                            <Input
-                                                autoComplete="off"
-                                                placeholder="لطفا شهر خود را انتخاب کنید"
-                                                className=" border-none"
-                                                disabled={mutation.isPending}
-                                                {...field}
-                                            />
+                                            <RadioGroup {...field} className='flex  flex-row-reverse items-center gap-4'>
+                                                <div className="flex items-center space-x-1">
+                                                    <label htmlFor="option1" className="text-[20px]">نو</label>
+                                                    <RadioGroupItem value="option1" id="option1" />
+                                                </div>
+                                                <div className="flex items-center space-x-1">
+                                                    <label htmlFor="option2" className="text-[20px]">در حد نو</label>
+                                                    <RadioGroupItem value="option2" id="option2" />
+                                                </div>
+                                                <div className="flex items-center space-x-1">
+                                                    <label htmlFor="option3" className="text-[20px]">کارکرده</label>
+                                                    <RadioGroupItem value="option3" id="option3" />
+                                                </div>
+                                            </RadioGroup>
                                         </FormControl>
                                         <FormMessage className="-bottom-5 right-4" />
                                     </FormItem>
@@ -299,13 +318,7 @@ function page() {
                                             <FormLabel>تصاویر  کالا</FormLabel>
 
                                             <FormControl>
-                                                <Input
-                                                    autoComplete="off"
-                                                    placeholder="نشانی خود را وارد کنید"
-                                                    className=" border-none"
-                                                    disabled={mutation.isPending}
-                                                    {...field}
-                                                />
+                                                <Uploader />
                                             </FormControl>
                                             <FormMessage className="-bottom-5 right-4" />
                                         </FormItem>
@@ -324,7 +337,7 @@ function page() {
                         <h3 className='text-lg font-bold'>تضامین</h3>
 
 
-                        <div className='flex flex-col gap-8'>
+                        <div className='flex items-center flex-wrap gap-4 text-lg'>
 
 
                             <FormField
@@ -333,13 +346,85 @@ function page() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input
-                                                autoComplete="off"
-                                                placeholder="لطفا شهر خود را انتخاب کنید"
-                                                className=" border-none"
-                                                disabled={mutation.isPending}
-                                                {...field}
-                                            />
+                                            <label className="flex items-center gap-2">
+                                                <Checkbox {...field} />
+                                                <span>سفته بانکی</span>
+                                            </label>
+                                        </FormControl>
+                                        <FormMessage className="-bottom-5 right-4" />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <label className="flex items-center gap-2">
+                                                <Checkbox {...field} />
+                                                <span>چک صیادی</span>
+                                            </label>
+                                        </FormControl>
+                                        <FormMessage className="-bottom-5 right-4" />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <label className="flex items-center gap-2">
+                                                <Checkbox {...field} />
+                                                <span>چک صیادی</span>
+                                            </label>
+                                        </FormControl>
+                                        <FormMessage className="-bottom-5 right-4" />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <label className="flex items-center gap-2">
+                                                <Checkbox {...field} />
+                                                <span>وجه نقد</span>
+                                            </label>
+                                        </FormControl>
+                                        <FormMessage className="-bottom-5 right-4" />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <label className="flex items-center gap-2">
+                                                <Checkbox {...field} />
+                                                <span>کارت ملی</span>
+                                            </label>
+                                        </FormControl>
+                                        <FormMessage className="-bottom-5 right-4" />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <label className="flex items-center gap-2">
+                                                <Checkbox {...field} />
+                                                <span>شناسنامه</span>
+                                            </label>
                                         </FormControl>
                                         <FormMessage className="-bottom-5 right-4" />
                                     </FormItem>
