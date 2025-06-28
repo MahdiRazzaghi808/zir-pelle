@@ -33,7 +33,7 @@ const subCategories: SubCategory[] = [
   { id: 202, name: "کفش", parent_id: 2 },
 ];
 
-function CategorySelector() {
+export default function CategorySelector() {
   const [selectedParent, setSelectedParent] = useState<Category | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
